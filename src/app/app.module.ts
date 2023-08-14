@@ -1,14 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+// フォーム用
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { MembersComponent } from './members/members.component';
+import { MemberDetailComponent } from './member-detail/member-detail.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MembersComponent,
+    MemberDetailComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

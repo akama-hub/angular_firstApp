@@ -1,0 +1,15 @@
+<h2> 社員一覧 </h2>
+<ul class="members">
+    <!-- ()内で書くことをイベントバインディング -->
+    <!-- [class]内で書くことをクラスバインディング -->
+    <li 
+        *ngFor="let member of members" 
+        [class.selected] = "member  === selectedMember" 
+        (click) = "onSelect(member)"
+    >
+        <span class="badge">{{member.id}}</span> {{member.name}}
+    </li>
+</ul>
+
+<!-- member-detail コンポーネントにselectedMemberをmemberとして渡している -->
+<app-member-detail [member] = "selectedMember"></app-member-detail>
