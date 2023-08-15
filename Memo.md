@@ -77,5 +77,25 @@ npx tsc --initを実行すると簡単にtsconfig.jsonを追加できる。
 
     ng generate service 受け渡したいデータ名
 
-とたたく
+とたたく。
+
+### ルーティング用のモジュールの作成
+ターミナルで
+
+    ng generate module モジュール名 --flat --module=app
+
+とたたく。
+
+--flatオプションはappディレクトリ直下にファイルのみを作成する。
+
+--moduleオプションはapp.moduleのimportモジュールに自動で追加するようにしてくれる。
+
+### HTTPクライアントモジュール
+データサーバをシミュレートする用のデータサーバ設定
+
+ターミナルで
+
+    npm install angular-in-memory-web-api --save
+
+とたたく。
 

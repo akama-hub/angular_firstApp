@@ -3,6 +3,7 @@ import { Member } from '../member';
 import { MEMBERS } from '../mock-members';
 // Memberのデータ取得用
 import { MemberService } from '../member.service';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-members',
@@ -11,10 +12,13 @@ import { MemberService } from '../member.service';
 })
 export class MembersComponent implements OnInit{
   members: Member[];
-  selectedMember: Member;
+  // selectedMember: Member;
 
   // ディペンデンシーインジェクション
-  constructor(private memberService: MemberService) {
+  constructor(
+    private memberService: MemberService,
+    // private messageService: MessageService
+    ) {
 
   }
 
@@ -22,9 +26,13 @@ export class MembersComponent implements OnInit{
   ngOnInit(): void{
     this.getMembers();
   }
-  onSelect(member: Member): void { 
-    this.selectedMember = member;
-  }
+
+  // onSelect(member: Member): void { 
+  //   this.selectedMember = member;
+  //   // テンプレート文字列にしないと変数を埋め込めない
+  //   this.messageService.add(`MembersComponent: 社員データ( id = ${member.id} ) が選択されました`);
+  // }
+
   getMembers(): void{
     // Observableオブジェクトを使った非同期処理のデータ渡し
     this.memberService.getMembers().subscribe(members => this.members = members)
