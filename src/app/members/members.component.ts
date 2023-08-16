@@ -4,6 +4,7 @@ import { MEMBERS } from '../mock-members';
 // Memberのデータ取得用
 import { MemberService } from '../member.service';
 import { MessageService } from '../message.service';
+import { MemberDetailComponent } from '../member-detail/member-detail.component';
 
 @Component({
   selector: 'app-members',
@@ -35,7 +36,24 @@ export class MembersComponent implements OnInit{
 
   getMembers(): void{
     // Observableオブジェクトを使った非同期処理のデータ渡し
+    // membersを引数にとって、this.membersに代入して、リターンしている
     this.memberService.getMembers().subscribe(members => this.members = members)
   }
 
+  add(name: string): void {
+    // 前後の空白文字の除去
+    name = name.trim();
+    if(!name){      return;    }
+
+    this.memberService.addMember({ name } as Member)
+    .subscribe(member => {
+      this.members.push(member);
+    });
+  }
+
+  delete(member: Member): void{
+    // 選択されているmemberを取り除く
+    this.members = this.members.filter(m => m !== member);
+    this.memberService.deleteMember(member).subscribe();
+  }
 }
