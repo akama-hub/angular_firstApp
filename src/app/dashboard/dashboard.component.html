@@ -1,5 +1,5 @@
-<h3>会社役員</h3>
 <div class = "grid grid-pad">
+    <h3>会社役員</h3>
     <a 
     *ngFor="let member of members"
     class="col-l-4"
@@ -10,5 +10,7 @@
         </div>
     </a>
 </div>
+<!-- cssファイルのfloat: leftの解除用 -->
+<p style="clear:both;"></p>
 
 <app-member-search></app-member-search>
