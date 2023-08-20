@@ -7,6 +7,101 @@ Angularを使った開発手順のメモ
 
 の２パターン。今回はVSCode版
 
+## windows(WSL) または linux での環境構築法
+バージョン管理を行う必要がない場合はNode.jsをそのままダウンロードしてインストールを行うが、
+アプリケーション開発を行う場合は基本的にバージョン管理を行うことが多い。
+なのでNode.jsだけでなく、バージョン管理ツールも一緒にインストールを行う。
+### homebrewのインストール
+*追記； homebrewからnodebrewをインストールするのは良くなさそう…
+
+https://brew.sh/index_ja.htmlの公式サイトを参考に、
+
+```/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"```
+
+インストールができているか ```brew --version``` で確認する
+
+### nodebrewのインストール（追記版）
+https://github.com/hokaccha/nodebrew
+を参考に
+
+    curl -L git.io/nodebrew | perl - setup
+
+    export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+    source ~/.bashrc
+
+    nodebrew help
+
+
+
+### nodebrewのインストール
+
+    brew install nodebrew
+
+インストール直後の状態だとnodebrewへのパスが設定されていないため環境変数PATHに実行ファイルまでのパスを追加する
+下記設定を行うことでターミナル上で```nodebrew xx```といったコマンドが実行できるようになる
+
+    # home/.bash_profileが作成されていない場合、homeディレクトリに移動後に先にこちらのコマンドを実行する
+    touch ~/.bash_profile
+
+    # vimで.bash_profileを編集する
+    vim ~/.bash_profile
+
+    # 実行直後にiキーを押して挿入モードに移行後、以下の行を追加
+    # 追加後にEscキーを押してノーマルモードに戻った後、:wqで保存してvimを終了させる
+    export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+完了後、.bash_profileを再読み込みする
+    
+    source ~/.bash_profile
+
+ここで、```nodebrew --version```で確認してみると、
+nodebrew not foundのエラーが表示されてので以下を実行した
+
+    sudo apt-get install build-essential
+
+    echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> /home/`whoami`/.profile
+
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+すると、インストールが完了した
+
+### Node.jsの最新バージョンもしくは指定したバージョンのインストールおよび切り替え
+
+    # もしすでにインストールしている場合
+    sudo apt remove nodejs
+
+    # 最新バージョンをインストールする場合
+    nodebrew install-binary latest
+
+    # 安定バージョンをインストールする場合
+    nodebrew install stable 
+
+
+    # バージョンを指定してインストールする場合
+    nodebrew install-binary 12.4.0
+
+    # 現在インストール可能なバージョンを表示する
+    nodebrew ls-remote
+
+完了後、インストールされたバージョンを確認する
+
+    nodebrew list
+
+    v20.5.1
+    current: none
+
+初回インストール時または、バージョンを切り替える場合は以下のコマンドを使用する
+
+    nodebrew use v20.5.1
+
+正常に切り替えができているかを確認する
+
+    nodebrew list
+
+    v20.5.1
+
+    current: v20.5.1
 
 ## おすすめのVSCodeの拡張機能
 + Japanese Language Pack for VS Code 
