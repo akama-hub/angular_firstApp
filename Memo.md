@@ -7,7 +7,7 @@ Angularを使った開発手順のメモ
 
 の２パターン。今回はVSCode版
 
-# windows(WSL) または linux での環境構築法
+# A, windows(WSL) または linux での環境構築法
 バージョン管理を行う必要がない場合はNode.jsをそのままダウンロードしてインストールを行うが、
 アプリケーション開発を行う場合は基本的にバージョン管理を行うことが多い。
 なのでNode.jsだけでなく、バージョン管理ツールも一緒にインストールを行う。
@@ -119,6 +119,48 @@ nodebrew not foundのエラーが表示されてので以下を実行した
     v20.5.1
 
     current: v20.5.1
+
+## B, windowsでの環境構築法
+
+Nodeのバージョン管理用に[Volta](https://docs.volta.sh/guide/getting-started)を採用。URL先の公式のインストーラからインストールする。
+
+### Node.js v15をインストール
+
+    volta install node@15
+    node -v
+    v15.14.0
+
+### 最新版をインストールしたい場合
+
+    volta install node
+
+### インストールしたNode.jsのバージョンを確認
+
+    #バージョンの一覧を表示
+    volta list all
+    ⚡️ User toolchain:
+        Node runtimes:
+            v12.13.1
+            v12.22.12
+            v15.14.0 (default)
+            v16.15.0
+        Package managers:
+        Packages:
+    #デフォルトのバージョンを表示
+    node -v
+    v15.14.0
+
+### アンインストール
+voltaには```uninstall```のコマンドが現時点で使用できないため、直接特定のバージョンのNode.jsを削除する。具体的には、%LOCALAPPDATA%\Volta\tools\image\node<バージョン>のディレクトリを削除。
+
+### ディレクトリごとにNode.jsのバージョンを固定する
+プロジェクトのディレクトリまで移動して```volta pin```コマンドを実行
+
+    volta pin node@12.13.1
+    success: pinned node@12.13.1 (with npm@6.12.1) in package.json
+
+するとpackage.jsonに下のように追記され、これによって、プロジェクトのメンバー全員がNode.jsの同じバージョンを自動的に使える。
+
 
 ## 4. VSCode上のNode環境の設定
 WSLの拡張機能を入れるだけ
