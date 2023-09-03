@@ -120,6 +120,58 @@ nodebrew not foundのエラーが表示されてので以下を実行した
 
     current: v20.5.1
 
+## Docker の環境構築
+
+### Docker Engine のインストール
+[ Docker の公式](https://docs.docker.jp/v1.9/engine/installation/ubuntulinux.html)
+[ WSL2にdockerをインストール ](https://qiita.com/hkusaba/items/5b44248d758214f99e97)
+
+Docker の公式GPG鍵を使ったインストール手順
+
+```
+# 古いバージョンのdockerを削除
+$ apt-get remove docker docker-engine docker.io containerd runc
+
+# パッケージインデックスの更新とパッケージインストール
+$ apt-get update
+$ apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Dockerの公式GPGキーを追加
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# stableのレポジトリを追加
+$ echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 再度パッケージインデックスを更新し、DockerEngineをインストール
+$ apt-get update
+$ apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+### Docker Compose のインストール
+[Docker の公式](https://docs.docker.jp/v1.9/compose/install.html)
+[GitHub 上にある Compose レポジトリのリリース・ページ ](https://github.com/docker/compose/releases)
+
+```
+curl -L https://github.com/docker/compose/releases/download/1.5.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+```
+
++ インストールを確認
+```
+$ docker-compose --version
+docker-compose version: 1.5.1
+```
+
+※　もし “Permission denied” エラーが表示される場合は、/usr/local/bin ディレクトリに対する書き込み権限がない
+```
+$ chmod +x /usr/local/bin/docker-compose
+```
+
 ## B, windowsでの環境構築法
 
 Nodeのバージョン管理用に[Volta](https://docs.volta.sh/guide/getting-started)を採用。URL先の公式のインストーラからインストールする。
@@ -160,6 +212,8 @@ voltaには```uninstall```のコマンドが現時点で使用できないため
     success: pinned node@12.13.1 (with npm@6.12.1) in package.json
 
 するとpackage.jsonに下のように追記され、これによって、プロジェクトのメンバー全員がNode.jsの同じバージョンを自動的に使える。
+
+
 
 
 ## 4. VSCode上のNode環境の設定
