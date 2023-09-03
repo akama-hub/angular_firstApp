@@ -130,11 +130,11 @@ Docker の公式GPG鍵を使ったインストール手順
 
 ```
 # 古いバージョンのdockerを削除
-$ apt-get remove docker docker-engine docker.io containerd runc
+$ sudo apt-get remove docker docker-engine docker.io containerd runc
 
 # パッケージインデックスの更新とパッケージインストール
-$ apt-get update
-$ apt-get install -y \
+$ sudo apt-get update
+$ sudo apt-get install -y \
     ca-certificates \
     curl \
     gnupg \
@@ -149,17 +149,19 @@ $ echo \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # 再度パッケージインデックスを更新し、DockerEngineをインストール
-$ apt-get update
-$ apt-get install -y docker-ce docker-ce-cli containerd.io
+$ sudo apt-get update
+$ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
 
 ### Docker Compose のインストール
 [Docker の公式](https://docs.docker.jp/v1.9/compose/install.html)
 [GitHub 上にある Compose レポジトリのリリース・ページ ](https://github.com/docker/compose/releases)
 
++ WSL 上でのインストール
 ```
-curl -L https://github.com/docker/compose/releases/download/1.5.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
 ```
+
 
 + インストールを確認
 ```
@@ -170,6 +172,26 @@ docker-compose version: 1.5.1
 ※　もし “Permission denied” エラーが表示される場合は、/usr/local/bin ディレクトリに対する書き込み権限がない
 ```
 $ chmod +x /usr/local/bin/docker-compose
+```
+
+### Docker 実行時
+
+まず、docker の起動状態を確認
+```
+sudo service docker status
+```
+
+起動していなければ、以下の順に進む
+
+docker を起動するために
+```
+sudo systemctl enable docker
+sudo service docker start
+```
+
+試しにhello-world をしてみる
+```
+sudo docker run hello-world
 ```
 
 ## B, windowsでの環境構築法
