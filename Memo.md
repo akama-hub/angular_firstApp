@@ -194,6 +194,96 @@ sudo service docker start
 sudo docker run hello-world
 ```
 
+### 2 回目以降の Docker 起動時 (WSL2 の場合) 
+
+Dockerコマンドを叩くと以下のようなエラーが出てしまう。
+
+```
+$ docker ps
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+```
+
+Dockerが起動できていない。
+原因は、Dockerインストール後に起動させていないとか、Dockerを落としたのに起動処理を忘れているとか。
+そのため、以下のコマンドで起動させれば解決する。
+
+```
+$ systemctl start docker
+```
+
+※ WSL 上で systemctl が動かない時の対処
+
+```
+$ systemctl
+System has not been booted with systemd as init system (PID 1). Can't operate.
+Failed to connect to bus: Host is down
+```
+
+PID1 の command が systemd ではなく /init になっている状態は systemctl が正常に動いていない
+```
+$ ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0    896   528 ?        Sl   15:51   0:00 /init
+```
+
+二つ方法が有りそう
+
+#### 1. WSL がSystemd をサポート
+
+バージョンが 0.67.6 以上であれば、利用可能
+```
+wsl --version
+```
+
+wsl.confファイルに設定を追加
+```
+sudo vim /etc/wsl.conf
+
+[boot]
+systemd=true
+```
+
+```wsl.conf``` ファイルに設定を追加
+
+その後、WSL で ```systemctl list-unit-files --type=service``` を実行し、Systemd が動いているのが確認できれば終了
+
+#### 1. genie を利用
+
+[genie を利用することで systemd を PID1 で動作させることができる](https://github.com/arkane-systems/genie)
+
+```
+# 「systemd-genie」パッケージのリポジトリーのGPGキーをダウンロード
+sudo wget -O /etc/apt/trusted.gpg.d/wsl-transdebian.gpg https://arkane-systems.github.io/wsl-transdebian/apt/wsl-transdebian.gpg
+
+sudo chmod a+r /etc/apt/trusted.gpg.d/wsl-transdebian.gpg
+
+# 2 行追加
+sudo vim /etc/apt/sources.list.d/wsl-transdebian.list
+deb https://arkane-systems.github.io/wsl-transdebian/apt/ focal main
+deb-src https://arkane-systems.github.io/wsl-transdebian/apt/ focal main
+
+sudo apt update
+
+sudo apt upgrade
+
+sudo apt install -y systemd-genie
+
+# 実行
+genie -s
+
+# エラー消去 (しなくても良いかも)
+sudo rm -rf /etc/apt/sources.list.d/wsl-translinux.list
+```
+
+最後に~/.bashrcか~/.bash_profileに以下の内容を追記
+
+```
+if [ "`ps -eo pid,cmd | grep systemd | grep -v grep | sort -n -k 1 | awk 'NR==1 { print $1 }'`" != "1" ]; then
+  genie -s
+fi
+```
+
+
 ## B, windowsでの環境構築法
 
 Nodeのバージョン管理用に[Volta](https://docs.volta.sh/guide/getting-started)を採用。URL先の公式のインストーラからインストールする。
