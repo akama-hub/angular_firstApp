@@ -283,6 +283,28 @@ if [ "`ps -eo pid,cmd | grep systemd | grep -v grep | sort -n -k 1 | awk 'NR==1 
 fi
 ```
 
+### WSL2 + Docker 環境で動作が遅い理由
+参考）
++ [Docker x Laravel めちゃくちゃ遅い Docker for Mac を爆速化する](https://qiita.com/ucan-lab/items/a88e2e5c2a79f2426163)
++ [「WSL2 + Docker」が遅いなら、速くすればいい](https://qiita.com/LemonmanNo39/items/e92ed9e3b9c812238006)
++ [Windows + WSL2 + docker + laravel を 10 倍速くする方法](https://www.aska-ltd.jp/jp/blog/197)
+
+#### OS ファイル システム間でのファイルの読み込みが遅い
+Windows と Linux では HDD のフォーマット形式が違います。
+Windows は NTFS、Linux は EXT4 といった具合です。
+主に耐障害性やセキュリティの設計思想から両者で違いが出ています。
+
+#### 結論
+プロジェクトの置く位置を
+```
+¥¥wsl$Ubuntu¥mnt¥
+```
+配下から
+```
+¥¥wsl$Ubuntu¥home¥
+```
+¥wsl$Ubuntu¥home¥移動して
+そこから ```docker-compose up``` で起動するだけ！
 
 ## B, windowsでの環境構築法
 
